@@ -20,7 +20,7 @@
 
 import random
 
-class Cards(object):
+class Card(object):
     
     def __init__(self, value, suit):
         self.value = value
@@ -52,16 +52,18 @@ class Deck(object):
         deck = []
         for value in ['A', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K']:
             for suit in ['Diamonds', 'Clubs', 'Hearts', 'Spades']:
-                deck.append(Cards(value, suit))
+                deck.append(Card(value, suit))
         random.shuffle(deck)
         self.cards = deck
-        self.size = len(deck)
 
     def __repr__(self):
         return "{}".format(self.cards)
 
     def __str__(self):
         return "Deck size: {}".format(self.size)
+
+    def __len__(self):
+        return len(self.cards)
 
     def shuffle(self):
         random.shuffle(self.cards)
@@ -70,19 +72,33 @@ class Deck(object):
         return self.cards.pop()
 
     def flop(self):
-        for i in range(3):
-            table.append(self.give_card())
-            self.cards.pop()
-        return table
+        if len(table) == 0:
+            for i in range(3):
+                table.append(self.give_card())
+                self.cards.pop()
+            return table
+        else:
+            print "Flop already made"
 
     def turn(self):
-        table.append(self.give_card())
-        return table
+        if len(table) == 3:
+            table.append(self.give_card())
+            return table
+        elif len(table) < 3:
+            print "Do the Flop first"
+        else:
+            print "Turn already made"
     
     def river(self):
-        table.append(self.give_card())
-        return table
-            
+        if len(table) == 4:
+            table.append(self.give_card())
+            return table
+        elif len(table) == 3:
+            print "Do the Turn first"
+        elif len(table) < 3:
+            print "Do the Flop first"
+        else:
+            print "River already made"
 
 class Player(object):
     
@@ -150,13 +166,7 @@ class Player(object):
 
     def fold(self):
         pass
-    
-    
-class Game(object):
-
-    def __init__(self, number_of_players):
-        self.number_of_players = number_of_players
-        
+            
 
 if __name__ == '__main__':
     table = []
@@ -171,7 +181,7 @@ if __name__ == '__main__':
     default_chips = [green_chip, blue_chip, blue_chip, red_chip, red_chip,
                      red_chip, red_chip, white_chip, white_chip]
 
-    p1 = Player("Anderson", default_chips)
-    p2 = Player("Computer", default_chips)
+    p1 = Player("Anderson", default_chips[:])
+    p2 = Player("Computer", default_chips[:])
 
             
