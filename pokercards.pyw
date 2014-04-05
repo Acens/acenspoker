@@ -62,7 +62,7 @@ class Deck(object):
         # this function allows `print deck' to work properly.
         s = ""
         for c in self.cards:
-            s = s + c.__str__() + " "
+            s = s + str(c) + " "
         return "[ " + s + "]"
 
     def shuffle_deck(self):
